@@ -42,7 +42,7 @@ by.QinT6o :)
 
 
 - 2024/07/19
-  1. 新增一个 HTML 文件 PasteTestWeb.html ，用于供用户测试软件可行性。
+  1. 新增一个`HTML`文件`PasteTestWeb.html`，用于供用户测试软件可行性。
 
 
 - 2025/05/12
@@ -52,5 +52,5 @@ by.QinT6o :)
 
 
 - 2025/11/16
-  1. 提供打包好的可执行文件 PasteNinja.exe 。
+  1. 提供打包好的可执行文件`PasteNinja.exe`。
   2. 整理目录结构。
