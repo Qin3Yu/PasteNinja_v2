@@ -1,0 +1,5 @@
+# Enter the following command in the terminal to build the program, please ensure that your Icon.ico file exists.
+
+# Run first: pip install pyinstaller
+
+pyinstaller --name PasteNinja --icon=Icon.ico --onefile --windowed main.py
