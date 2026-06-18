@@ -1,7 +1,13 @@
 import tkinter as tk
 
+text1 = None
+text2 = None
+
 
 def highlight_differences():
+    if text1 is None or text2 is None:
+        return
+
     text1_content = text1.get("1.0", tk.END).strip()
     text2_content = text2.get("1.0", tk.END).strip()
     text1.tag_remove("red", "1.0", tk.END)
@@ -64,5 +70,8 @@ def create_window(notebook):
 
 
 def set_text(input_text):
+    if text1 is None:
+        return
+
     text1.delete('1.0', tk.END)
     text1.insert('1.0', input_text)

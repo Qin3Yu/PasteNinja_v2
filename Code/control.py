@@ -1,3 +1,5 @@
+from difflib import SequenceMatcher
+
 from ui import WinGUI
 
 
@@ -18,57 +20,44 @@ class Controller:
         self.ui.tk_text_t201.insert("1.0", input_text)
 
     def proofread(self, evt):
-        """Compare contents of tk_text_t201 and tk_text_t202 and highlight differences"""
-        # Get text contents
+        """Compare contents of tk_text_t201 and tk_text_t202 and highlight differences."""
         text1_content = self.ui.tk_text_t201.get("1.0", "end").strip()
         text2_content = self.ui.tk_text_t202.get("1.0", "end").strip()
 
-        # Clear existing tags
         self.ui.tk_text_t201.tag_remove("match", "1.0", "end")
         self.ui.tk_text_t201.tag_remove("diff", "1.0", "end")
         self.ui.tk_text_t202.tag_remove("match", "1.0", "end")
         self.ui.tk_text_t202.tag_remove("diff", "1.0", "end")
 
-        # Split into lines
         lines1 = text1_content.split('\n')
         lines2 = text2_content.split('\n')
-
-        # Make both lists equal in length
         max_lines = max(len(lines1), len(lines2))
         while len(lines1) < max_lines:
             lines1.append("")
         while len(lines2) < max_lines:
             lines2.append("")
 
-        # Compare line by line
         for line_num in range(max_lines):
             line1 = lines1[line_num]
             line2 = lines2[line_num]
 
-            max_len = max(len(line1), len(line2))
+            for tag, start1, end1, start2, end2 in SequenceMatcher(None, line1, line2).get_opcodes():
+                text1_start = f"{line_num + 1}.{start1}"
+                text1_end = f"{line_num + 1}.{end1}"
+                text2_start = f"{line_num + 1}.{start2}"
+                text2_end = f"{line_num + 1}.{end2}"
 
-            # Compare character by character
-            for char_pos in range(max_len):
-                char1 = line1[char_pos] if char_pos < len(line1) else ""
-                char2 = line2[char_pos] if char_pos < len(line2) else ""
-
-                # Calculate index positions
-                start_index = f"{line_num + 1}.{char_pos}"
-                end_index = f"{line_num + 1}.{char_pos + 1}"
-
-                if char1 == char2:
-                    # Matching characters - light green background
-                    if char1:  # Only apply if not empty
-                        self.ui.tk_text_t201.tag_add("match", start_index, end_index)
-                        self.ui.tk_text_t202.tag_add("match", start_index, end_index)
+                if tag == "equal":
+                    if start1 != end1:
+                        self.ui.tk_text_t201.tag_add("match", text1_start, text1_end)
+                    if start2 != end2:
+                        self.ui.tk_text_t202.tag_add("match", text2_start, text2_end)
                 else:
-                    # Different characters - light red background
-                    if char1:
-                        self.ui.tk_text_t201.tag_add("diff", start_index, end_index)
-                    if char2:
-                        self.ui.tk_text_t202.tag_add("diff", start_index, end_index)
+                    if start1 != end1:
+                        self.ui.tk_text_t201.tag_add("diff", text1_start, text1_end)
+                    if start2 != end2:
+                        self.ui.tk_text_t202.tag_add("diff", text2_start, text2_end)
 
-        # Configure tag colors
         self.ui.tk_text_t201.tag_config("match", background="#D5FFD5")  # Light green
         self.ui.tk_text_t201.tag_config("diff", background="#FFD5D5")  # Light red
         self.ui.tk_text_t202.tag_config("match", background="#D5FFD5")  # Light green
