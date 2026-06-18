@@ -34,8 +34,8 @@ guide_text = '''
  
  
  
-                               -- by GitHub.QinT6o
-                            PasteAssistant_v.2.0
+                            -- by GitHub.rurikacy
+                              PasteAssistant_v.2
 '''
 
 
